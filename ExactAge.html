@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ExactAge Calculator</title>
+    <style>
+        /* Base Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            background-color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Top Blue Navbar */
+        .navbar {
+            background-color: #114c97;
+            padding: 15px 30px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .navbar span {
+            color: #8daae3;
+            font-family: "Times New Roman", Times, serif;
+            font-size: 28px;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+        }
+
+        /* Main Content Center */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            gap: 25px;
+        }
+
+        /* Calculator Container */
+        .container {
+            background: #ffffff;
+            padding: 25px;
+            border-radius: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+            text-align: center;
+            width: 100%;
+            max-width: 330px;
+        }
+
+        h1 {
+            color: #444;
+            margin-bottom: 20px;
+            font-size: 22px;
+            font-weight: 700;
+        }
+
+        /* Digital Display Screen */
+        .display-screen {
+            background: #e2e2e2;
+            border-radius: 12px;
+            padding: 10px;
+            font-size: 22px;
+            font-weight: bold;
+            color: #777;
+            letter-spacing: 1px;
+            margin: 0 auto 20px auto;
+            width: 85%;
+        }
+
+        /* On-Screen Keyboard Grid */
+        .keyboard {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .key {
+            background: #ffffff;
+            border: 2px solid #e0e0e0;
+            padding: 12px;
+            font-size: 28px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: bold;
+            color: #333;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+            transition: transform 0.1s;
+        }
+
+        .key:active {
+            transform: translateY(2px);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+
+        /* Special Keys (Clear & Backspace) */
+        .key.action-clear { 
+            background: #b8b8b8; 
+            color: white; 
+            border-color: #b8b8b8;
+        }
+        
+        .key.action-back { 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+        }
+
+        .action-back svg {
+            width: 32px;
+            height: 32px;
+            stroke: #333;
+        }
+
+        /* Calculate Button */
+        .btn-calculate {
+            background: #114c97;
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+            border: none;
+            border-radius: 25px;
+            padding: 12px;
+            width: 85%;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(17, 76, 151, 0.3);
+            transition: transform 0.1s;
+        }
+
+        .btn-calculate:active {
+            transform: translateY(2px);
+        }
+
+        /* Result Area */
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f4f8fd;
+            border-radius: 12px;
+            border-left: 5px solid #114c97;
+            display: none;
+            text-align: left;
+        }
+
+        .result p {
+            color: #444;
+            font-size: 16px;
+            font-weight: bold;
+            margin: 8px 0;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .result span {
+            color: #114c97;
+            font-size: 18px;
+        }
+
+        /* About Section */
+        .about-section {
+            background: #ffffff;
+            padding: 20px 25px;
+            border-radius: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+            width: 100%;
+            max-width: 330px;
+            text-align: center;
+        }
+
+        .about-section h2 {
+            color: #114c97;
+            font-size: 18px;
+            margin-bottom: 12px;
+        }
+
+        .about-section p {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Top Navbar -->
+    <div class="navbar">
+        <span>ExactAge</span>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        
+        <!-- Calculator Container -->
+        <div class="container">
+            <h1>Age Calculator</h1>
+            
+            <div class="display-screen" id="display">
+                DD/MM/YYYY
+            </div>
+
+            <div class="keyboard">
+                <button class="key" onclick="pressKey('1')">1</button>
+                <button class="key" onclick="pressKey('2')">2</button>
+                <button class="key" onclick="pressKey('3')">3</button>
+                <button class="key" onclick="pressKey('4')">4</button>
+                <button class="key" onclick="pressKey('5')">5</button>
+                <button class="key" onclick="pressKey('6')">6</button>
+                <button class="key" onclick="pressKey('7')">7</button>
+                <button class="key" onclick="pressKey('8')">8</button>
+                <button class="key" onclick="pressKey('9')">9</button>
+                
+                <button class="key action-clear" onclick="clearInput()">C</button>
+                <button class="key" onclick="pressKey('0')">0</button>
+                <button class="key action-back" onclick="backspace()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 4H8l-7 8 7 8h13a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z"></path>
+                        <line x1="18" y1="9" x2="12" y2="15"></line>
+                        <line x1="12" y1="9" x2="18" y2="15"></line>
+                    </svg>
+                </button>
+            </div>
+
+            <button class="btn-calculate" onclick="calculateAge()">CALCULATE</button>
+
+            <div class="result" id="result-box">
+                <p>Years: <span id="years">0</span></p>
+                <p>Months: <span id="months">0</span></p>
+                <p>Days: <span id="days">0</span></p>
+            </div>
+        </div>
+
+        <!-- About Section Added Here -->
+        <div class="about-section">
+            <h2>About ExactAge</h2>
+            <p>ExactAge is a fast and simple tool designed to calculate your exact age. Just enter your Date of Birth using the built-in keypad to instantly find out your age in Years, Months, and Days.</p>
+        </div>
+
+    </div>
+
+    <script>
+        let dateStr = "";
+
+        function pressKey(num) {
+            if (dateStr.length < 8) {
+                dateStr += num;
+                updateDisplay();
+                document.getElementById("result-box").style.display = "none";
+            }
+        }
+
+        function backspace() {
+            if (dateStr.length > 0) {
+                dateStr = dateStr.slice(0, -1);
+                updateDisplay();
+                document.getElementById("result-box").style.display = "none";
+            }
+        }
+
+        function clearInput() {
+            dateStr = "";
+            updateDisplay();
+            document.getElementById("result-box").style.display = "none";
+        }
+
+        function updateDisplay() {
+            let text = "DD/MM/YYYY";
+            
+            if (dateStr.length > 0) {
+                let d = (dateStr.substring(0, 2) + "DD").substring(0, 2);
+                let m = (dateStr.length > 2) ? (dateStr.substring(2, 4) + "MM").substring(0, 2) : "MM";
+                let y = (dateStr.length > 4) ? (dateStr.substring(4, 8) + "YYYY").substring(0, 4) : "YYYY";
+                text = `${d}/${m}/${y}`;
+                document.getElementById("display").style.color = "#444";
+            } else {
+                document.getElementById("display").style.color = "#777";
+            }
+
+            document.getElementById("display").innerText = text;
+        }
+
+        function calculateAge() {
+            if (dateStr.length !== 8) {
+                alert("Please enter full Date of Birth (DDMMYYYY)!");
+                return;
+            }
+
+            let day = parseInt(dateStr.substring(0, 2));
+            let month = parseInt(dateStr.substring(2, 4));
+            let year = parseInt(dateStr.substring(4, 8));
+
+            let today = new Date();
+            let currentYear = today.getFullYear();
+
+            if (day > 31 || day < 1 || month > 12 || month < 1 || year > currentYear || year < 1900) {
+                alert("Please enter a valid Date of Birth!");
+                return;
+            }
+
+            let birthDate = new Date(year, month - 1, day);
+            let years = today.getFullYear() - birthDate.getFullYear();
+            let months = today.getMonth() - birthDate.getMonth();
+            let days = today.getDate() - birthDate.getDate();
+
+            if (days < 0) {
+                months--;
+                const prevMonthDate = new Date(today.getFullYear(), today.getMonth(), 0);
+                days += prevMonthDate.getDate();
+            }
+
+            if (months < 0) {
+                years--;
+                months += 12;
+            }
+
+            document.getElementById("years").innerText = years;
+            document.getElementById("months").innerText = months;
+            document.getElementById("days").innerText = days;
+            
+            document.getElementById("result-box").style.display = "block";
+        }
+    </script>
+</body>
+</html>
